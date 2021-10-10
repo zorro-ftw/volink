@@ -6,12 +6,18 @@ class CustomTextField extends StatelessWidget {
       this.enabledBorderColor,
       this.focusedBorderColor,
       this.hintText,
-      this.inputTextStyle});
+      this.inputTextStyle,
+      this.keyboardType,
+      this.textFieldController,
+      this.onChanged});
 
   final Icon prefixIcon;
   final Color focusedBorderColor, enabledBorderColor;
   final String hintText;
   final TextStyle inputTextStyle;
+  final TextInputType keyboardType;
+  final TextEditingController textFieldController;
+  final Function onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +44,12 @@ class CustomTextField extends StatelessWidget {
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
         child: TextField(
+          controller: textFieldController,
+          keyboardType: keyboardType,
           style: inputTextStyle,
           textAlign: TextAlign.center,
           obscureText: true,
-          onChanged: (value) {},
+          onChanged: onChanged,
           decoration: kTextFieldDecoration.copyWith(
               hintText: hintText, prefixIcon: prefixIcon),
         ),

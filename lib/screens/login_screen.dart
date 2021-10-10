@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:volink/screens/registration_screen.dart';
 import 'package:volink/widgets/round_button.dart';
 import 'package:volink/widgets/custom_textfield.dart';
 
-class SignUpScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 20,
               ),
               CustomTextField(
+                keyboardType: TextInputType.emailAddress,
                 prefixIcon: Icon(Icons.email_rounded),
                 hintText: "E-mail",
                 enabledBorderColor: Color(0xFF1D1D1F),
@@ -49,6 +51,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 6,
               ),
               CustomTextField(
+                onChanged: (value) {
+                  print(value);
+                },
                 prefixIcon: Icon(CupertinoIcons.lock_fill),
                 hintText: "Password",
                 enabledBorderColor: Color(0xFF1D1D1F),
@@ -60,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               RoundButton(
                   title: "Login",
-                  color: Color(0xFF384152),
+                  color: kButtonBackgroundColor,
                   onPressed: () {
                     //TODO - 1 - Login fonksiyonu çağırılacak
                   }),
@@ -85,6 +90,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     GestureDetector(
                       onTap: () {
                         //TODO - 2 - Sign Up sayfasına navigate edilecek
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return RegistrationScreen();
+                          }),
+                        );
                       },
                       child: Text(
                         "Sign Up",
