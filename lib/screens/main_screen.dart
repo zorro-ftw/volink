@@ -16,13 +16,13 @@ class _MainScreenState extends State<MainScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.chat_bubble_2_fill),
         title: ("Chats"),
-        activeColorPrimary: Colors.white54,
+        activeColorPrimary: kGeneralColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.search),
         title: ("Search"),
-        activeColorPrimary: Colors.white54,
+        activeColorPrimary: kGeneralColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];

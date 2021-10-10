@@ -1,0 +1,1 @@
+enum PlayButtonState { Playing, Paused }
