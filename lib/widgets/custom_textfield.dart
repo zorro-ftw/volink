@@ -9,7 +9,8 @@ class CustomTextField extends StatelessWidget {
       this.inputTextStyle,
       this.keyboardType,
       this.textFieldController,
-      this.onChanged});
+      this.onChanged,
+      this.hideText});
 
   final Icon prefixIcon;
   final Color focusedBorderColor, enabledBorderColor;
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextEditingController textFieldController;
   final Function onChanged;
+  final bool hideText;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboardType,
           style: inputTextStyle,
           textAlign: TextAlign.center,
-          obscureText: true,
+          obscureText: hideText == null ? false : hideText,
           onChanged: onChanged,
           decoration: kTextFieldDecoration.copyWith(
               hintText: hintText, prefixIcon: prefixIcon),

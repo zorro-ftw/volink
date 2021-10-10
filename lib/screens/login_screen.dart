@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:volink/screens/main_screen.dart';
 import 'package:volink/screens/registration_screen.dart';
 import 'package:volink/widgets/round_button.dart';
 import 'package:volink/widgets/custom_textfield.dart';
@@ -59,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 enabledBorderColor: Color(0xFF1D1D1F),
                 focusedBorderColor: Colors.grey,
                 inputTextStyle: TextStyle(color: Colors.grey),
+                hideText: true,
               ),
               SizedBox(
                 height: 10,
@@ -68,6 +70,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: kButtonBackgroundColor,
                   onPressed: () {
                     //TODO - 1 - Login fonksiyonu çağırılacak
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return MainScreen();
+                      }),
+                    );
                   }),
               SizedBox(
                 height: 5,
