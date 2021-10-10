@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:volink/widgets/round_button.dart';
+import 'package:volink/widgets/custom_textfield.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -37,44 +38,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 height: 20,
               ),
-              Theme(
-                data: Theme.of(context).copyWith(primaryColor: Colors.grey),
-                child: Container(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.75),
-                  child: TextField(
-                    style: TextStyle(color: Colors.white24),
-                    textAlign: TextAlign.center,
-                    obscureText: true,
-                    onChanged: (value) {},
-                    decoration: kTextFieldDecoration.copyWith(
-                        hintText: "E-Mail",
-                        prefixIcon: Icon(
-                          Icons.email_rounded,
-                        )),
-                  ),
-                ),
+              CustomTextField(
+                prefixIcon: Icon(Icons.email_rounded),
+                hintText: "E-mail",
+                enabledBorderColor: Color(0xFF1D1D1F),
+                focusedBorderColor: Colors.grey,
+                inputTextStyle: TextStyle(color: Colors.grey),
               ),
               SizedBox(
                 height: 6,
               ),
-              Theme(
-                data: Theme.of(context).copyWith(
-                  primaryColor: Colors.grey,
-                ),
-                child: Container(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.75),
-                  child: TextField(
-                    style: TextStyle(color: Colors.white24),
-                    textAlign: TextAlign.center,
-                    obscureText: true,
-                    onChanged: (value) {},
-                    decoration: kTextFieldDecoration.copyWith(
-                        hintText: "Password",
-                        prefixIcon: Icon(CupertinoIcons.lock)),
-                  ),
-                ),
+              CustomTextField(
+                prefixIcon: Icon(CupertinoIcons.lock_fill),
+                hintText: "Password",
+                enabledBorderColor: Color(0xFF1D1D1F),
+                focusedBorderColor: Colors.grey,
+                inputTextStyle: TextStyle(color: Colors.grey),
               ),
               SizedBox(
                 height: 10,
