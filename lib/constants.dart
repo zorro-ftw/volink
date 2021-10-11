@@ -5,6 +5,21 @@ const kTextGradientColor1 = Color(0xFF399E86);
 const kTextGradientColor2 = Color(0xFFEF4321);
 const kButtonBackgroundColor = Color(0xFF384152);
 const kGeneralColor = Colors.white54;
+const kPlayButtonColor = Color(0xFF94C7BF);
+
+const kMessageTileDecoration = BoxDecoration(
+  color: Color(0xFF18724D),
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+);
+
+const kChatMainScreenBottomDecoration = BoxDecoration(
+  color: kButtonBackgroundColor,
+  borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+);
+
 const kDivider = Divider(
   color: Color(0xFF1D1D1F),
   // color: Color(0xFFBDBDBD),

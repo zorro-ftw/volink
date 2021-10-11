@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
-import 'package:volink/enums.dart';
+import 'package:volink/models/message.dart';
 
-class MessageTile extends StatefulWidget {
-  @override
-  _ChatTileState createState() => _ChatTileState();
-}
-
-class _ChatTileState extends State<MessageTile> {
-  PlayButtonState playButtonState = PlayButtonState.Paused;
+class MessageTile extends StatelessWidget {
+  MessageTile({this.message, this.ownMessage});
+  final Message message;
+  final bool ownMessage;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: MaterialButton(
-        onPressed: () {
-          changeIcon();
-        },
-        child: playButtonState == PlayButtonState.Paused
-            ? Icon(
-                Icons.play_arrow,
-                color: kGeneralColor,
-              )
-            : Icon(
-                Icons.pause,
-                color: kGeneralColor,
-              ),
-      ),
+    return Row(
+      mainAxisAlignment:
+          ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Container(
+            decoration: kMessageTileDecoration,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.play_arrow_rounded,
+                  color: kPlayButtonColor,
+                  size: 40,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(message.messageID)
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
-
-  void changeIcon() {
-    setState(() {
-      if (playButtonState == PlayButtonState.Paused) {
-        playButtonState = PlayButtonState.Playing;
-      } else {
-        playButtonState = PlayButtonState.Paused;
-      }
-    });
-  }
 }
+
+//Color(0xFF3730A3).withOpacity(1),
