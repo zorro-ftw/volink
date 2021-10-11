@@ -5,10 +5,17 @@ const kTextGradientColor1 = Color(0xFF399E86);
 const kTextGradientColor2 = Color(0xFFEF4321);
 const kButtonBackgroundColor = Color(0xFF384152);
 const kGeneralColor = Colors.white54;
-const kPlayButtonColor = Color(0xFF94C7BF);
+const kPlayButtonColor = Color(0xFF47545A);
 
-const kMessageTileDecoration = BoxDecoration(
-  color: Color(0xFF18724D),
+const kOwnMessageTileDecoration = BoxDecoration(
+  color: kTextGradientColor1,
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+);
+
+const kPeerMessageTileDecoration = BoxDecoration(
+  color: Color(0xFFCE654C),
   borderRadius: BorderRadius.all(
     Radius.circular(10),
   ),

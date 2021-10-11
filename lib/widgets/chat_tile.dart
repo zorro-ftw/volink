@@ -13,21 +13,18 @@ class ChatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      padding: EdgeInsets.only(top: 5, bottom: 5, left: 2, right: 4),
+      height: 60,
+      padding: EdgeInsets.only(top: 5, bottom: 8, left: 2, right: 4),
       // color: Color(0xFF3730A3).withOpacity(0.6),
       child: ListTile(
         onTap: onTap,
         leading: CustomAvatar(
           chat: chat,
-          radius: 24,
+          radius: 20,
         ),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            chat.peerID,
-            style: TextStyle(color: kGeneralColor, fontSize: 20),
-          ),
+        title: Text(
+          chat.peerID,
+          style: TextStyle(color: kGeneralColor, fontSize: 18),
         ),
         trailing: getLastMessageDateFormatted(),
       ),
@@ -49,7 +46,7 @@ class ChatTile extends StatelessWidget {
 
     return Text(
       formattedDate,
-      style: TextStyle(color: kGeneralColor, fontSize: 16),
+      style: TextStyle(color: kGeneralColor, fontSize: 13),
     );
   }
 }

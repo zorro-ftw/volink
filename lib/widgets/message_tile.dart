@@ -14,9 +14,11 @@ class MessageTile extends StatelessWidget {
           ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(3.0),
+          padding: const EdgeInsets.all(4.0),
           child: Container(
-            decoration: kMessageTileDecoration,
+            decoration: ownMessage
+                ? kOwnMessageTileDecoration
+                : kPeerMessageTileDecoration,
             child: Row(
               children: [
                 Icon(
