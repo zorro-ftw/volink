@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:volink/firebase_services/auth_service.dart';
 import 'package:volink/screens/main_screen.dart';
 import 'package:volink/screens/registration_screen.dart';
 import 'package:volink/widgets/round_button.dart';
@@ -13,6 +15,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String email;
+  String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,13 +52,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 enabledBorderColor: Color(0xFF1D1D1F),
                 focusedBorderColor: Colors.grey,
                 inputTextStyle: TextStyle(color: Colors.grey),
+                onChanged: (value) {
+                  email = value;
+                },
               ),
               SizedBox(
                 height: 6,
               ),
               CustomTextField(
                 onChanged: (value) {
-                  print(value);
+                  password = value;
                 },
                 prefixIcon: Icon(CupertinoIcons.lock_fill),
                 hintText: "Password",
@@ -68,14 +76,27 @@ class _LoginScreenState extends State<LoginScreen> {
               RoundButton(
                   title: "Login",
                   color: kButtonBackgroundColor,
-                  onPressed: () {
+                  onPressed: () async {
                     //TODO - 1 - Login fonksiyonu çağırılacak
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return MainScreen();
-                      }),
-                    );
+                    final bool checkSignIn =
+                        await AuthService().signIN(email, password);
+
+                    if (checkSignIn) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MainScreen();
+                          },
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Wrong username/password!"),
+                        ),
+                      );
+                    }
                   }),
               SizedBox(
                 height: 5,
@@ -108,10 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         "Sign Up",
                         style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                            decorationThickness: 2),
+                          fontSize: 16,
+                          color: Colors.blue,
+                        ),
                       ),
                     ),
                     Container()

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const kDefaultProfilePhotoURL = '';
+
 const kBackgroundColor = Color(0xFF303133);
 const kTextGradientColor1 = Color(0xFF399E86);
 const kTextGradientColor2 = Color(0xFFEF4321);

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "964129299144",
+    "project_id": "volink-41421",
+    "storage_bucket": "volink-41421.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964129299144:android:41bfc36d05a198f9c323fd",
+        "android_client_info": {
+          "package_name": "app.volink.volink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "964129299144-g7nqo22bdg3kt7ua7ot9dgbgerqp6ph5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApuUczBNPcgHyxs4nfLJVAT1FjjrhXNhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "964129299144-g7nqo22bdg3kt7ua7ot9dgbgerqp6ph5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

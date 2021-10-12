@@ -8,14 +8,18 @@ class MessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        reverse: true,
-        itemBuilder: (context, index) {
-          return MessageTile(
-            message: chat.messages[index],
-            ownMessage: index % 3 == 0 ? true : false,
-          );
-        },
-        itemCount: chat.messages.length);
+    return chat.messages.length == 0
+        ? Center(
+            child: Text("Send a message and start conversation!"),
+          )
+        : ListView.builder(
+            reverse: true,
+            itemBuilder: (context, index) {
+              return MessageTile(
+                message: chat.messages[index],
+                ownMessage: index % 3 == 0 ? true : false,
+              );
+            },
+            itemCount: chat.messages.length);
   }
 }

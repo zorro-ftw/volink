@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>964129299144-46idl97flrm3rnesbpa5lhuohcuekavo.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.964129299144-46idl97flrm3rnesbpa5lhuohcuekavo</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAQ_iRMSGKxeD5GGcJ5RVVQob3CyD8wTFM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>964129299144</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.volink</string>
+	<key>PROJECT_ID</key>
+	<string>volink-41421</string>
+	<key>STORAGE_BUCKET</key>
+	<string>volink-41421.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:964129299144:ios:a0a99e7c350bd363c323fd</string>
+</dict>
+</plist>

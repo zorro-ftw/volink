@@ -153,15 +153,7 @@ class ChatsListData extends ChangeNotifier {
       peerPhotoURL:
           "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg",
       lastMessageAt: DateTime.now(),
-      messages: [
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-      ],
+      messages: [],
     ),
   ];
   get userChatsCount {
