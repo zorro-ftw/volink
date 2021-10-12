@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:volink/constants.dart';
 
 class RecordingScreen extends StatefulWidget {
   @override

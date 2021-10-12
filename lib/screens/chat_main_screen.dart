@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:volink/models/chat.dart';
 import 'package:volink/constants.dart';
