@@ -1,6 +1,5 @@
 # Firebase
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
+Runner/GoogleService-Info.plist
 
 *.mode1v3
 *.mode2v3
