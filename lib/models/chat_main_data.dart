@@ -10,6 +10,7 @@ class ChatMainData extends ChangeNotifier {
   Chat displayedChat;
   Future getCurrentChatMessages(Chat currentChat) async {
     displayedChat = currentChat;
+    notifyListeners();
     await for (var snapshot
         in firestore.collection('chats').doc(currentChat.chatID).snapshots()) {
       updateCurrentChatMessages(snapshot);
@@ -26,6 +27,7 @@ class ChatMainData extends ChangeNotifier {
                 documentID: snapshotMessages[i], collection: 'messages');
         Message currentMesage = Message(
           messageID: snapshotMessages[i],
+          messageForID: currentMessageRaw['messageForID'],
           sentAt: currentMessageRaw['sentAt'],
           voiceFileURL: currentMessageRaw['voiceFileURL'],
           receiverID: currentMessageRaw['receiverID'],

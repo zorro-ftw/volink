@@ -11,6 +11,12 @@ class ChatsListedScreen extends StatefulWidget {
 
 class _ChatsListedScreenState extends State<ChatsListedScreen> {
   @override
+  void didChangeDependencies() {
+    Provider.of<ChatsListData>(context).getUserChatList();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Provider.of<ChatsListData>(context).userChatsCount == 0
         ? Scaffold(

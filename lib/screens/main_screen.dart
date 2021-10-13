@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
+import 'package:volink/firebase_services/auth_service.dart';
+import 'package:volink/models/chats_list_data.dart';
 import 'package:volink/screens/chats_listed_screen.dart';
 import 'package:volink/screens/search_users_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
+import 'package:volink/models/chats_list_data.dart';
 
 class MainScreen extends StatefulWidget {
   static const String id = 'main_screen';
@@ -57,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(AuthService().currentUser().displayName);
     final _controller = PersistentTabController(initialIndex: 0);
     return WillPopScope(
       onWillPop: _onBackPressed,
