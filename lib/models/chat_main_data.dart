@@ -19,14 +19,15 @@ class ChatMainData extends ChangeNotifier {
 
   void updateCurrentChatMessages(
       DocumentSnapshot<Map<String, dynamic>> snapshot) async {
-    List<String> snapshotMessages = snapshot.data()['messages'];
+    List snapshotMessages = snapshot.data()['messages'];
     if (snapshotMessages.isNotEmpty) {
       for (int i = 0; i < snapshotMessages.length; i++) {
         Map<String, dynamic> currentMessageRaw = await DataService()
             .getCollectionByIdQuery(
-                documentID: snapshotMessages[i], collection: 'messages');
-        Message currentMesage = Message(
-          messageID: snapshotMessages[i],
+                documentID: snapshotMessages[i].toString(),
+                collection: 'messages');
+        Message currentMessage = Message(
+          messageID: snapshotMessages[i].toString(),
           messageForID: currentMessageRaw['messageForID'],
           sentAt: currentMessageRaw['sentAt'],
           voiceFileURL: currentMessageRaw['voiceFileURL'],
@@ -36,17 +37,17 @@ class ChatMainData extends ChangeNotifier {
           senderName: currentMessageRaw['senderName'],
         );
         if (currentChatMessages.length == 0) {
-          currentChatMessages.add(currentMesage);
+          currentChatMessages.add(currentMessage);
         } else if (currentChatMessages.length <= snapshotMessages.length) {
           bool isNew = true;
           for (int j = 0; j < currentChatMessages.length; j++) {
-            if (currentChatMessages[j].messageID == currentMesage.messageID) {
+            if (currentChatMessages[j].messageID == currentMessage.messageID) {
               isNew = false;
-              currentChatMessages[j] = currentMesage;
+              currentChatMessages[j] = currentMessage;
             }
           }
           if (isNew) {
-            currentChatMessages.add(currentMesage);
+            currentChatMessages.add(currentMessage);
           }
         }
       }

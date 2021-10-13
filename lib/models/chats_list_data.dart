@@ -15,7 +15,6 @@ class ChatsListData extends ChangeNotifier {
   }
 
   Future getUserChatList() async {
-    print("getUserChatList çalışmaya başladı.");
     await for (var snapshot in firestore
         .collection('chats')
         .where('peerIDs', arrayContains: AuthService().currentUserId)
@@ -27,13 +26,10 @@ class ChatsListData extends ChangeNotifier {
 
   void updateUserChatList(QuerySnapshot<Map<String, dynamic>> snapshot) {
     List<Chat> onlineChatList = [];
+
     if (snapshot.size != 0) {
       print("if'in içine girdi");
       for (int i = 0; i < snapshot.docs.length; i++) {
-        print(snapshot.docs[i].data()['peerIDs']);
-        print(snapshot.docs[i].data()['peerNames']);
-        print(snapshot.docs[i]);
-        print(snapshot.docs[i].data());
         Chat currentChat = Chat(
             chatID: snapshot.docs[i].id,
             peerID: snapshot.docs[i].data()['peerIDs'][0] ==

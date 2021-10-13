@@ -11,7 +11,7 @@ class Chat {
   final String chatID;
   final String peerID;
   final String peerName;
-  final List<Message> messages;
+  final List messages;
   final DateTime lastMessageAt;
   final String peerPhotoURL;
 }

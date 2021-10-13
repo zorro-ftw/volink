@@ -10,7 +10,10 @@ class MessagesList extends StatelessWidget {
     return Consumer<ChatMainData>(builder: (context, chatMainData, child) {
       return chatMainData.currentChatMessages.length == 0
           ? Center(
-              child: Text("Send a message and start conversation!"),
+              child: Text(
+                "Send a message and start conversation!",
+                style: TextStyle(color: Colors.white54, fontSize: 17),
+              ),
             )
           : ListView.builder(
               reverse: true,

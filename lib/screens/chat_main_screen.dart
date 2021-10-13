@@ -61,7 +61,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
               radius: 18,
             ),
             SizedBox(
-              width: 6,
+              width: 10,
             ),
             Text(
               widget.chat.peerName,

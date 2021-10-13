@@ -23,7 +23,7 @@ class ChatTile extends StatelessWidget {
           radius: 20,
         ),
         title: Text(
-          chat.peerID,
+          chat.peerName,
           style: TextStyle(color: kGeneralColor, fontSize: 18),
         ),
         trailing: getLastMessageDateFormatted(),

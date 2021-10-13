@@ -11,9 +11,9 @@ class ChatsListedScreen extends StatefulWidget {
 
 class _ChatsListedScreenState extends State<ChatsListedScreen> {
   @override
-  void didChangeDependencies() {
-    Provider.of<ChatsListData>(context).getUserChatList();
-    super.didChangeDependencies();
+  void initState() {
+    Provider.of<ChatsListData>(context, listen: false).getUserChatList();
+    super.initState();
   }
 
   @override

@@ -14,8 +14,8 @@ class ChatsList extends StatelessWidget {
         itemBuilder: (context, index) {
           return ChatTile(
             chat: chatsListData.userChats[index],
-            onTap: () async {
-              await Provider.of<ChatMainData>(context, listen: false)
+            onTap: () {
+              Provider.of<ChatMainData>(context, listen: false)
                   .getCurrentChatMessages(chatsListData.userChats[index]);
 
               pushNewScreen(
