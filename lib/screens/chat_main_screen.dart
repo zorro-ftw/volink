@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:volink/models/chat.dart';
 import 'package:volink/constants.dart';
 import 'package:volink/screens/recording_screen.dart';
+import 'package:volink/services/audio_service.dart';
 import 'package:volink/viewmodels/messages_list.dart';
 import 'package:volink/widgets/custom_avatar.dart';
 
@@ -71,9 +72,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
       ),
       body: Container(
         padding: EdgeInsets.only(bottom: 5),
-        child: MessagesList(
-          chat: widget.chat,
-        ),
+        child: MessagesList(),
       ),
       bottomNavigationBar: Container(
         height: 55,
@@ -92,7 +91,9 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
                   ),
                   splashColor: kPlayButtonColor.withOpacity(0.3),
                   iconSize: 40,
-                  onPressed: () {}),
+                  onPressed: () {
+                    AudioService().recordVoice();
+                  }),
             ),
             SizedBox(
               width: 10,

@@ -8,7 +8,7 @@ import 'package:volink/firebase_services/data_service.dart';
 class AuthService {
   final _auth = FirebaseAuth.instance;
 
-  currentUser() async {
+  User currentUser() {
     return _auth.currentUser;
   }
 

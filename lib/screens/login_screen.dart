@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
@@ -10,6 +9,9 @@ import 'package:volink/widgets/round_button.dart';
 import 'package:volink/widgets/custom_textfield.dart';
 
 class LoginScreen extends StatefulWidget {
+
+  static const String id = 'login_screen';
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -93,7 +95,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Wrong username/password!"),
+                          padding: EdgeInsets.all(2),
+                          backgroundColor: Color(0xFF893434),
+                          content: Text(
+                            "Wrong username/password!",
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       );
                     }

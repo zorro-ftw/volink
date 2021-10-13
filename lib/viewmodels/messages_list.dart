@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:volink/firebase_services/auth_service.dart';
+import 'package:volink/models/chat_main_data.dart';
 import 'package:volink/widgets/message_tile.dart';
-import 'package:volink/models/chat.dart';
+import 'package:provider/provider.dart';
 
 class MessagesList extends StatelessWidget {
-  MessagesList({this.chat});
-  final Chat chat;
-
   @override
   Widget build(BuildContext context) {
-    return chat.messages.length == 0
-        ? Center(
-            child: Text("Send a message and start conversation!"),
-          )
-        : ListView.builder(
-            reverse: true,
-            itemBuilder: (context, index) {
-              return MessageTile(
-                message: chat.messages[index],
-                ownMessage: index % 3 == 0 ? true : false,
-              );
-            },
-            itemCount: chat.messages.length);
+    return Consumer<ChatMainData>(builder: (context, chatMainData, child) {
+      return chatMainData.currentChatMessages.length == 0
+          ? Center(
+              child: Text("Send a message and start conversation!"),
+            )
+          : ListView.builder(
+              reverse: true,
+              itemBuilder: (context, index) {
+                return MessageTile(
+                  message: chatMainData.currentChatMessages[index],
+                  ownMessage:
+                      chatMainData.currentChatMessages[index].senderID ==
+                              AuthService().currentUserId
+                          ? true
+                          : false,
+                );
+              },
+              itemCount: chatMainData.currentChatMessages.length);
+    });
   }
 }

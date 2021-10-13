@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:volink/models/chats_list_data.dart';
 import 'package:volink/screens/chat_main_screen.dart';
 import 'package:volink/widgets/chat_tile.dart';
+import 'package:volink/models/chat_main_data.dart';
 
 class ChatsList extends StatelessWidget {
   @override
@@ -13,17 +14,10 @@ class ChatsList extends StatelessWidget {
         itemBuilder: (context, index) {
           return ChatTile(
             chat: chatsListData.userChats[index],
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) {
-              //       return ChatMainScreen(
-              //         chat: chatsListData.userChats[index],
-              //       );
-              //     },
-              //   ),
-              // );
+            onTap: () async {
+              await Provider.of<ChatMainData>(context, listen: false)
+                  .getCurrentChatMessages(chatsListData.userChats[index]);
+
               pushNewScreen(
                 context,
                 screen: ChatMainScreen(

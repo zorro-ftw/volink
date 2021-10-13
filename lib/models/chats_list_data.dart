@@ -1,166 +1,72 @@
 import 'package:flutter/foundation.dart';
+import 'package:volink/firebase_services/auth_service.dart';
 import 'package:volink/models/chat.dart';
-import 'package:volink/models/message.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatsListData extends ChangeNotifier {
-  List<Chat> _userChats = [
-    Chat(
-      chatID: "asd",
-      peerID: "asd",
-      peerName: "asdadffghhhgjgjh",
-      peerPhotoURL:
-          "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg",
-      lastMessageAt: DateTime.now(),
-      messages: [
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-      ],
-    ),
-    Chat(
-      chatID: "asd",
-      peerID: "asd",
-      peerName: "asdadffghhhgjgjh",
-      peerPhotoURL:
-          "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg",
-      lastMessageAt: DateTime.now(),
-      messages: [
-        Message(
-            messageID: "asd1",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd2",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd3",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd4",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-      ],
-    ),
-    Chat(
-      chatID: "asd",
-      peerID: "asd",
-      peerName: "asdadffghhhgjgjh",
-      peerPhotoURL:
-          "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg",
-      lastMessageAt: DateTime.now(),
-      messages: [
-        Message(
-            messageID: "asd",
-            sentAt: DateTime.now(),
-            receiverID: "asd",
-            receiverName: "asd",
-            senderID: "asd",
-            senderName: "asd"),
-      ],
-    ),
-    Chat(
-      chatID: "asd",
-      peerID: "asd",
-      peerName: "asdadffghhhgjgjh",
-      peerPhotoURL:
-          "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg",
-      lastMessageAt: DateTime.now(),
-      messages: [],
-    ),
-  ];
+  List<Chat> _userChats = [];
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   get userChatsCount {
     return _userChats.length;
   }
 
-  get userChats {
+  List<Chat> get userChats {
     return _userChats;
+  }
+
+  Future getUserChatList() async {
+    await for (var snapshot in firestore
+        .collection('chats')
+        .where('peerIDs', arrayContains: AuthService().currentUserId)
+        .orderBy('lastMessageAt', descending: true)
+        .snapshots()) {}
+  }
+
+  void updateUserChatList(QuerySnapshot<Map<String, dynamic>> snapshot) {
+    List<Chat> onlineChatList = [];
+    if (snapshot.size != 0) {
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        Chat currentChat = Chat(
+            chatID: snapshot.docs[i].id,
+            peerID: snapshot.docs[i].data()['peerIDs'][0] ==
+                    AuthService().currentUserId
+                ? snapshot.docs[i].data()['peerIDs'][1]
+                : snapshot.docs[i].data()['peerIDs'][0],
+            peerName: snapshot.docs[i].data()['peerNames'][0] ==
+                    AuthService().currentUser().displayName
+                ? snapshot.docs[i].data()['peerNames'][1]
+                : snapshot.docs[i].data()['peerNames'][0],
+            messages: snapshot.docs[i].data()['messages'],
+            lastMessageAt: snapshot.docs[i].data()['lastMessageAt'].toDate(),
+            peerPhotoURL: snapshot.docs[i].data()['photoURLs'][0] ==
+                    AuthService().currentUser().photoURL
+                ? snapshot.docs[i].data()['photoURLs'][1]
+                : snapshot.docs[i].data()['photoURLs'][0]);
+        onlineChatList.add(currentChat);
+        if (_userChats.length == 0) {
+          _userChats.add(currentChat);
+        } else if (_userChats.length < snapshot.size) {
+          bool isNew = true;
+          for (int j = 0; j < _userChats.length; j++) {
+            if (_userChats[j].chatID == currentChat.chatID) {
+              isNew = false;
+              _userChats[j] = currentChat;
+            }
+          }
+          if (isNew) {
+            _userChats.add(currentChat);
+          }
+        }
+      }
+      if (_userChats.length > snapshot.size) {
+        for (int k = 0; k < _userChats.length; k++) {
+          if (!onlineChatList.contains(_userChats[k])) {
+            _userChats.removeAt(k);
+          }
+        }
+      }
+    } else {
+      _userChats.clear();
+    }
   }
 }
