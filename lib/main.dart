@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:volink/models/audio_data.dart';
 import 'package:volink/models/chat_main_data.dart';
 import 'package:volink/screens/login_screen.dart';
 import 'package:volink/models/chats_list_data.dart';
@@ -24,6 +25,7 @@ class Volink extends StatelessWidget {
     } else {
       _firstScreen = LoginScreen.id;
     }
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -31,7 +33,10 @@ class Volink extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ChatMainData(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AudioData(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

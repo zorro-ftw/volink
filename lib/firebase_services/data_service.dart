@@ -142,14 +142,14 @@ class FileService {
     }
   }
 
-  Future<String> uploadAudio(String recordFilePath) async {
+  Future uploadAudio(String recordFilePath) async {
     final Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child(path.basename(recordFilePath));
 
     UploadTask task = firebaseStorageRef.putFile(File(recordFilePath));
     try {
       String messageFileURL = await firebaseStorageRef.getDownloadURL();
-      return messageFileURL;
+      print("messageFileURL = $messageFileURL");
     } on FirebaseException catch (e) {
       print(e.message);
       return null;

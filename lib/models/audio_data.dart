@@ -3,9 +3,11 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:record_mp3/record_mp3.dart';
 import 'package:volink/firebase_services/data_service.dart';
+import 'package:flutter/foundation.dart';
 
-class AudioService {
+class AudioData extends ChangeNotifier {
   String recordFilePath;
+  RecordMp3 recorder = RecordMp3.instance;
   Future<bool> checkPermission(Permission permissionWanted) async {
     if (!await permissionWanted.isGranted) {
       PermissionStatus status = await permissionWanted.request();
@@ -32,25 +34,26 @@ class AudioService {
     bool hasPermission2 = await checkPermission(Permission.storage);
     if (hasPermission && hasPermission2) {
       recordFilePath = await getFilePath();
-      RecordMp3.instance.start(recordFilePath, (type) {
+      print(recordFilePath);
+      recorder.start(recordFilePath, (type) {
         print(type.index);
       });
     }
   }
 
   void cancelRecord() async {
-    bool s = RecordMp3.instance.stop();
+    bool s = recorder.stop();
     if (s) {
       await FileService().deleteFile(recordFilePath);
     }
   }
 
   void stopRecord() async {
-    bool s = RecordMp3.instance.stop();
+    bool s = recorder.stop();
 
     if (s) {
       await FileService().uploadAudio(recordFilePath);
-      await FileService().deleteFile(recordFilePath);
+      // await FileService().deleteFile(recordFilePath);
     }
   }
 }

@@ -24,6 +24,19 @@ class ChatsListData extends ChangeNotifier {
     }
   }
 
+  String checkPhotoURL(QueryDocumentSnapshot<Map<String, dynamic>> snapshot) {
+    if (snapshot.data()['photoURLs'].length != 0) {
+      if (snapshot.data()['photoURLs'][0] ==
+          AuthService().currentUser().photoURL) {
+        return snapshot.data()['photoURLs'][1];
+      } else {
+        return snapshot.data()['photoURLs'][0];
+      }
+    } else {
+      return null;
+    }
+  }
+
   void updateUserChatList(QuerySnapshot<Map<String, dynamic>> snapshot) {
     List<Chat> onlineChatList = [];
 
@@ -31,21 +44,19 @@ class ChatsListData extends ChangeNotifier {
       print("if'in içine girdi");
       for (int i = 0; i < snapshot.docs.length; i++) {
         Chat currentChat = Chat(
-            chatID: snapshot.docs[i].id,
-            peerID: snapshot.docs[i].data()['peerIDs'][0] ==
-                    AuthService().currentUserId
-                ? snapshot.docs[i].data()['peerIDs'][1]
-                : snapshot.docs[i].data()['peerIDs'][0],
-            peerName: snapshot.docs[i].data()['peerNames'][0] ==
-                    AuthService().currentUser().displayName
-                ? snapshot.docs[i].data()['peerNames'][1]
-                : snapshot.docs[i].data()['peerNames'][0],
-            messages: snapshot.docs[i].data()['messages'],
-            lastMessageAt: snapshot.docs[i].data()['lastMessageAt'].toDate(),
-            peerPhotoURL: snapshot.docs[i].data()['photoURLs'][0] ==
-                    AuthService().currentUser().photoURL
-                ? snapshot.docs[i].data()['photoURLs'][1]
-                : snapshot.docs[i].data()['photoURLs'][0]);
+          chatID: snapshot.docs[i].id,
+          peerID: snapshot.docs[i].data()['peerIDs'][0] ==
+                  AuthService().currentUserId
+              ? snapshot.docs[i].data()['peerIDs'][1]
+              : snapshot.docs[i].data()['peerIDs'][0],
+          peerName: snapshot.docs[i].data()['peerNames'][0] ==
+                  AuthService().currentUser().displayName
+              ? snapshot.docs[i].data()['peerNames'][1]
+              : snapshot.docs[i].data()['peerNames'][0],
+          messages: snapshot.docs[i].data()['messages'],
+          lastMessageAt: snapshot.docs[i].data()['lastMessageAt'].toDate(),
+          peerPhotoURL: checkPhotoURL(snapshot.docs[i]),
+        );
         onlineChatList.add(currentChat);
         if (_userChats.length == 0) {
           _userChats.add(currentChat);

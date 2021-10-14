@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:volink/widgets/custom_icon_button.dart';
+import 'package:provider/provider.dart';
+import 'package:volink/models/audio_data.dart';
 
 class RecordingScreen extends StatefulWidget {
   @override
@@ -25,21 +28,60 @@ class _RecordingScreenState extends State<RecordingScreen> {
             style: TextStyle(color: Colors.green, fontSize: 26),
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
-          Material(
-            elevation: 5,
-            color: Colors.white,
-            shape: CircleBorder(),
-            clipBehavior: Clip.hardEdge,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.done_rounded,
-                color: Colors.green,
-                size: 45,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomIconButton(
+                backGroundColor: Colors.white,
+                elevation: 5,
+                padding: EdgeInsets.all(8),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: 45,
+                ),
+                onTap: () {
+                  //TODO - Cancel recording çağırılacak
+                  Navigator.pop(context);
+                },
               ),
-            ),
+              SizedBox(
+                width: 8,
+              ),
+              CustomIconButton(
+                backGroundColor: Colors.white,
+                elevation: 5,
+                padding: EdgeInsets.all(8),
+                child: Icon(
+                  Icons.pause,
+                  color: Colors.black,
+                  size: 45,
+                ),
+                onTap: () {
+                  //TODO - Pause recording çağırılacak
+                },
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              CustomIconButton(
+                backGroundColor: Colors.white,
+                elevation: 5,
+                padding: EdgeInsets.all(8),
+                child: Icon(
+                  Icons.done_rounded,
+                  color: Colors.green,
+                  size: 45,
+                ),
+                onTap: () {
+                  //TODO - Stop recording & upload çağırılacak
+                  Provider.of<AudioData>(context, listen: false).stopRecord();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           )
         ],
       ),

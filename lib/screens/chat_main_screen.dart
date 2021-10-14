@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:volink/models/audio_data.dart';
 import 'package:volink/models/chat.dart';
 import 'package:volink/constants.dart';
 import 'package:volink/screens/recording_screen.dart';
-import 'package:volink/services/audio_service.dart';
 import 'package:volink/viewmodels/messages_list.dart';
 import 'package:volink/widgets/custom_avatar.dart';
+import 'package:volink/widgets/custom_icon_button.dart';
+import 'package:provider/provider.dart';
 
 class ChatMainScreen extends StatefulWidget {
   ChatMainScreen({this.chat});
@@ -18,7 +20,15 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: GestureDetector(
+      floatingActionButton: CustomIconButton(
+        backGroundColor: kButtonBackgroundColor,
+        elevation: 5,
+        padding: EdgeInsets.all(8),
+        child: Icon(
+          Icons.mic_outlined,
+          color: kTextGradientColor1,
+          size: 55,
+        ),
         onTap: () {
           showModalBottomSheet(
               context: context,
@@ -32,21 +42,9 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
                 ),
               ),
               backgroundColor: kBackgroundColor);
+          //TODO - Start recording çağırılacak
+          Provider.of<AudioData>(context, listen: false).recordVoice();
         },
-        child: Material(
-          elevation: 5,
-          color: kButtonBackgroundColor,
-          shape: CircleBorder(),
-          clipBehavior: Clip.hardEdge,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.mic_outlined,
-              color: kTextGradientColor1,
-              size: 55,
-            ),
-          ),
-        ),
       ),
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
@@ -80,10 +78,8 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Material(
-              color: Colors.transparent,
-              shape: CircleBorder(),
-              clipBehavior: Clip.hardEdge,
+            CustomIconButton(
+              backGroundColor: Colors.transparent,
               child: IconButton(
                   icon: Icon(
                     Icons.graphic_eq_rounded,
@@ -92,7 +88,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
                   splashColor: kPlayButtonColor.withOpacity(0.3),
                   iconSize: 40,
                   onPressed: () {
-                    AudioService().recordVoice();
+                    //TODO - Ses filtre ekranı açılacak
                   }),
             ),
             SizedBox(

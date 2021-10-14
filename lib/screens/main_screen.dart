@@ -21,16 +21,25 @@ class _MainScreenState extends State<MainScreen> {
     return showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text('Do you want to exit an App'),
+            backgroundColor: kBackgroundColor,
+            titleTextStyle: TextStyle(color: kGeneralColor),
+            contentTextStyle: TextStyle(color: kGeneralColor),
+            title: Text('Confirm'),
+            content: Text('Are you sure you want to exit?'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: Text('No'),
+                child: Text(
+                  'No',
+                  style: TextStyle(color: kTextGradientColor1),
+                ),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: Text('Yes'),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: kTextGradientColor2),
+                ),
               ),
             ],
           ),
