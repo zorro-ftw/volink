@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'package:volink/firebase_services/auth_service.dart';
 import 'package:volink/models/chat.dart';
-import 'package:provider/provider.dart';
-import 'package:volink/models/chat_main_data.dart';
-import 'package:volink/models/chats_list_data.dart';
 import 'package:volink/models/message.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -82,9 +78,12 @@ class DataService {
 }
 
 class FileService {
-  Future handleChat(BuildContext context, String voiceFileURL) async {
-    var currentChatDummy =
-        Provider.of<ChatMainData>(context, listen: true).displayedChat;
+  Future handleChat(
+      {List<Chat> userChats, Chat displayedChat, String voiceFileURL}) async {
+    bool isNewChat = true;
+    print(voiceFileURL);
+
+    var currentChatDummy = displayedChat;
     Message newRecordedMessage = Message(
       sentAt: Timestamp.now(),
       voiceFileURL: voiceFileURL,
@@ -95,65 +94,76 @@ class FileService {
       senderName: AuthService().currentUser().displayName,
     );
 
-    for (Chat chat
-        in Provider.of<ChatsListData>(context, listen: true).userChats) {
-      if (chat.chatID ==
-          Provider.of<ChatMainData>(context, listen: true)
-              .displayedChat
-              .chatID) {
-        DataService().addData(collectionPath: 'messages', data: {
-          'sentAt': newRecordedMessage.sentAt,
-          'voiceFileURL': newRecordedMessage.voiceFileURL,
-          'messageForID': newRecordedMessage.messageForID,
-          'receiverID': newRecordedMessage.receiverID,
-          'receiverName': newRecordedMessage.receiverName,
-          'senderID': newRecordedMessage.senderID,
-          'senderName': newRecordedMessage.senderName
-        });
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> dummyRawData =
-            await DataService().getStringQuery(
-                collection: 'messages',
-                queryString: newRecordedMessage.voiceFileURL,
-                field: 'voiceFileURL');
-        newRecordedMessage = Message(
-          messageID: dummyRawData[0].id,
-          sentAt: dummyRawData[0].data()['sentAt'],
-          voiceFileURL: dummyRawData[0].data()['voiceFileURL'],
-          messageForID: dummyRawData[0].data()['messageForID'],
-          receiverID: dummyRawData[0].data()['receiverID'],
-          receiverName: dummyRawData[0].data()['receiverName'],
-          senderID: dummyRawData[0].data()['senderID'],
-          senderName: dummyRawData[0].data()['senderName'],
-        );
-        Map<String, dynamic> dummyChatData = await DataService()
-            .getCollectionByIdQuery(
-                documentID: newRecordedMessage.messageForID,
-                collection: 'chats');
-        List<String> dummyMessageIDList =
-            dummyChatData['messages'].add(newRecordedMessage.messageID);
-        DataService().updateDataByID(
-            collectionPath: 'chats',
-            docID: newRecordedMessage.messageForID,
-            field: 'messages',
-            value: dummyMessageIDList);
-
-        break;
+    for (Chat chat in userChats) {
+      if (chat.chatID == displayedChat.chatID) {
+        isNewChat = false;
       }
     }
+    if (!isNewChat) {
+      await DataService().addData(collectionPath: 'messages', data: {
+        'sentAt': newRecordedMessage.sentAt,
+        'voiceFileURL': newRecordedMessage.voiceFileURL,
+        'messageForID': newRecordedMessage.messageForID,
+        'receiverID': newRecordedMessage.receiverID,
+        'receiverName': newRecordedMessage.receiverName,
+        'senderID': newRecordedMessage.senderID,
+        'senderName': newRecordedMessage.senderName
+      });
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> dummyRawData =
+          await DataService().getStringQuery(
+              collection: 'messages',
+              queryString: newRecordedMessage.voiceFileURL,
+              field: 'voiceFileURL');
+      newRecordedMessage = Message(
+        messageID: dummyRawData[0].id,
+        sentAt: dummyRawData[0].data()['sentAt'],
+        voiceFileURL: dummyRawData[0].data()['voiceFileURL'],
+        messageForID: dummyRawData[0].data()['messageForID'],
+        receiverID: dummyRawData[0].data()['receiverID'],
+        receiverName: dummyRawData[0].data()['receiverName'],
+        senderID: dummyRawData[0].data()['senderID'],
+        senderName: dummyRawData[0].data()['senderName'],
+      );
+      print('newRecordedMessage oluşturuldu: ' + newRecordedMessage.messageID);
+      Map<String, dynamic> dummyChatData = await DataService()
+          .getCollectionByIdQuery(
+              documentID: newRecordedMessage.messageForID, collection: 'chats');
+      print("DUMMY CHAT DATA ÇEKİLDİ, PEERNAMES = ");
+      print(dummyChatData['peerNames']);
+      print(dummyChatData['messages']);
+      List dummyMessageIDList = dummyChatData['messages'];
+
+      dummyMessageIDList.add(newRecordedMessage.messageID);
+      await DataService().updateDataByID(
+          collectionPath: 'chats',
+          docID: newRecordedMessage.messageForID,
+          field: 'messages',
+          value: dummyMessageIDList);
+    } else {}
   }
 
-  Future uploadAudio(String recordFilePath) async {
-    final Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(path.basename(recordFilePath));
+  Future uploadAudio(
+      {List<Chat> userChats, Chat displayedChat, String recordFilePath}) async {
+    var messageFileURL;
+    Reference firebaseStorageRef = FirebaseStorage.instance
+        .refFromURL("gs://volink-41421.appspot.com")
+        .child(path.basename(recordFilePath));
 
     UploadTask task = firebaseStorageRef.putFile(File(recordFilePath));
-    try {
-      String messageFileURL = await firebaseStorageRef.getDownloadURL();
-      print("messageFileURL = $messageFileURL");
-    } on FirebaseException catch (e) {
-      print(e.message);
-      return null;
-    }
+
+    task.whenComplete(() async {
+      try {
+        await firebaseStorageRef.getDownloadURL().then((value) {
+          handleChat(
+              userChats: userChats,
+              displayedChat: displayedChat,
+              voiceFileURL: value);
+        });
+      } on FirebaseException catch (e) {
+        print(e.message);
+      }
+    });
+
     // Task
   }
 

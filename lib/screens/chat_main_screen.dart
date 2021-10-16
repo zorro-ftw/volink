@@ -16,9 +16,11 @@ class ChatMainScreen extends StatefulWidget {
 }
 
 class _ChatMainScreenState extends State<ChatMainScreen> {
+  GlobalKey chatMainKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: chatMainKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: CustomIconButton(
         backGroundColor: kButtonBackgroundColor,

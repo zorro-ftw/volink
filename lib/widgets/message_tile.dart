@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:volink/constants.dart';
 import 'package:volink/models/message.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:intl/intl.dart';
 
 class MessageTile extends StatelessWidget {
   MessageTile({this.message, this.ownMessage});
@@ -37,7 +38,7 @@ class MessageTile extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                 ),
                 Container(
-                  width: 115,
+                  width: 85,
                   child: ProgressBar(
                       thumbRadius: 4,
                       thumbGlowRadius: 14,
@@ -48,13 +49,26 @@ class MessageTile extends StatelessWidget {
                       total: Duration(milliseconds: 5000)),
                 ),
                 SizedBox(
-                  width: 5,
-                )
+                  width: 10,
+                ),
+                getMessageDateFormatted()
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Text getMessageDateFormatted() {
+    String formattedDate;
+    var formatHm = DateFormat.Hm();
+
+    formattedDate = formatHm.format(message.sentAt.toDate());
+
+    return Text(
+      formattedDate,
+      style: TextStyle(color: Colors.black, fontSize: 13),
     );
   }
 }

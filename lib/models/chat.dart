@@ -1,5 +1,3 @@
-import 'package:volink/models/message.dart';
-
 class Chat {
   Chat(
       {this.chatID,

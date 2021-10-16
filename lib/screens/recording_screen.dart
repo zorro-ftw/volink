@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:volink/firebase_services/data_service.dart';
+import 'package:volink/models/chat_main_data.dart';
 import 'package:volink/widgets/custom_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:volink/models/audio_data.dart';
+import 'package:volink/models/chats_list_data.dart';
 
-class RecordingScreen extends StatefulWidget {
-  @override
-  _RecordingScreenState createState() => _RecordingScreenState();
-}
+class RecordingScreen extends StatelessWidget {
+  final FileService fileService = FileService();
 
-class _RecordingScreenState extends State<RecordingScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
       padding: EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.95),
@@ -22,6 +21,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
         ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "Recording",
@@ -44,6 +44,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 ),
                 onTap: () {
                   //TODO - Cancel recording çağırılacak
+                  Provider.of<AudioData>(context, listen: false).cancelRecord(
+                      Provider.of<AudioData>(context, listen: false)
+                          .recordFilePath);
                   Navigator.pop(context);
                 },
               ),
@@ -75,9 +78,22 @@ class _RecordingScreenState extends State<RecordingScreen> {
                   color: Colors.green,
                   size: 45,
                 ),
-                onTap: () {
+                onTap: () async {
                   //TODO - Stop recording & upload çağırılacak
-                  Provider.of<AudioData>(context, listen: false).stopRecord();
+                  bool s = await Provider.of<AudioData>(context, listen: false)
+                      .stopRecord();
+                  if (s) {
+                    await fileService.uploadAudio(
+                        displayedChat:
+                            Provider.of<ChatMainData>(context, listen: false)
+                                .displayedChat,
+                        userChats:
+                            Provider.of<ChatsListData>(context, listen: false)
+                                .userChats,
+                        recordFilePath:
+                            Provider.of<AudioData>(context, listen: false)
+                                .recordFilePath);
+                  }
                   Navigator.pop(context);
                 },
               ),

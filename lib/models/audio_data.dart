@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -7,6 +8,7 @@ import 'package:flutter/foundation.dart';
 
 class AudioData extends ChangeNotifier {
   String recordFilePath;
+  String voiceFileURL;
   RecordMp3 recorder = RecordMp3.instance;
   Future<bool> checkPermission(Permission permissionWanted) async {
     if (!await permissionWanted.isGranted) {
@@ -41,19 +43,15 @@ class AudioData extends ChangeNotifier {
     }
   }
 
-  void cancelRecord() async {
+  void cancelRecord(String cancelledRecordPath) async {
     bool s = recorder.stop();
     if (s) {
-      await FileService().deleteFile(recordFilePath);
+      await FileService().deleteFile(cancelledRecordPath);
     }
   }
 
-  void stopRecord() async {
+  Future<bool> stopRecord() async {
     bool s = recorder.stop();
-
-    if (s) {
-      await FileService().uploadAudio(recordFilePath);
-      // await FileService().deleteFile(recordFilePath);
-    }
+    return s;
   }
 }
