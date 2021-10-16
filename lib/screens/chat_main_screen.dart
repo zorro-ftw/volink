@@ -44,7 +44,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
                 ),
               ),
               backgroundColor: kBackgroundColor);
-          //TODO - Start recording çağırılacak
+
           Provider.of<AudioData>(context, listen: false).recordVoice();
         },
       ),

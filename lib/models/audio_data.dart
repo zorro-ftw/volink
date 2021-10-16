@@ -10,6 +10,8 @@ class AudioData extends ChangeNotifier {
   String recordFilePath;
   String voiceFileURL;
   RecordMp3 recorder = RecordMp3.instance;
+  RecordStatus recordStatus = RecordStatus.RECORDING;
+
   Future<bool> checkPermission(Permission permissionWanted) async {
     if (!await permissionWanted.isGranted) {
       PermissionStatus status = await permissionWanted.request();
@@ -40,6 +42,22 @@ class AudioData extends ChangeNotifier {
       recorder.start(recordFilePath, (type) {
         print(type.index);
       });
+    }
+  }
+
+  void pauseRecord() {
+    bool p = recorder.pause();
+    if (p) {
+      recordStatus = RecordStatus.PAUSE;
+      notifyListeners();
+    }
+  }
+
+  void resumeRecord() {
+    bool r = recorder.resume();
+    if (r) {
+      recordStatus = RecordStatus.RECORDING;
+      notifyListeners();
     }
   }
 

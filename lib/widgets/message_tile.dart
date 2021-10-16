@@ -7,17 +7,16 @@ import 'package:intl/intl.dart';
 import 'package:volink/enums.dart';
 
 class MessageTile extends StatefulWidget {
-  MessageTile({this.message, this.ownMessage});
+  MessageTile({this.message, this.ownMessage, this.audioManager});
   final Message message;
   final bool ownMessage;
+  final AudioManager audioManager;
 
   @override
   _MessageTileState createState() => _MessageTileState();
 }
 
 class _MessageTileState extends State<MessageTile> {
-  AudioManager audioManager = AudioManager();
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -59,9 +58,20 @@ class _MessageTileState extends State<MessageTile> {
 
   Widget getProgressBar() {
     return ValueListenableBuilder<ProgressBarState>(
-      valueListenable: audioManager.progressNotifier,
+      valueListenable: widget.audioManager.progressNotifier,
       builder: (_, value, __) {
         return ProgressBar(
+          progressBarColor: kPlayButtonColor,
+          bufferedBarColor: kBufferingColor,
+          baseBarColor: kBaseBarColor,
+          thumbColor: kPlayButtonColor,
+          thumbRadius: 5,
+          thumbGlowRadius: 12,
+          timeLabelLocation: TimeLabelLocation.below,
+          timeLabelTextStyle: TextStyle(
+              color: kPlayButtonColor,
+              fontSize: 11,
+              fontWeight: FontWeight.w600),
           progress: value.current,
           buffered: value.buffered,
           total: value.total,
@@ -71,16 +81,15 @@ class _MessageTileState extends State<MessageTile> {
   }
 
   Widget getButton() {
-    AudioManager audioManager = AudioManager();
     return ValueListenableBuilder<ButtonState>(
-      valueListenable: audioManager.buttonNotifier,
+      valueListenable: widget.audioManager.buttonNotifier,
       builder: (_, value, __) {
         switch (value) {
           case ButtonState.loading:
             return Container(
-              margin: EdgeInsets.all(9.0),
-              width: 30,
-              height: 30,
+              margin: EdgeInsets.all(11.5),
+              width: 25,
+              height: 25,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPlayButtonColor),
               ),
@@ -91,7 +100,7 @@ class _MessageTileState extends State<MessageTile> {
               iconSize: 40.0,
               padding: EdgeInsets.zero,
               onPressed: () {
-                audioManager.playMessage(widget.message);
+                widget.audioManager.playMessage();
               },
             );
           case ButtonState.playing:
@@ -103,7 +112,7 @@ class _MessageTileState extends State<MessageTile> {
               iconSize: 34.0,
               padding: EdgeInsets.zero,
               onPressed: () {
-                audioManager.pause();
+                widget.audioManager.pause();
               },
             );
           default:
@@ -128,15 +137,3 @@ class _MessageTileState extends State<MessageTile> {
     );
   }
 }
-
-// progressBarColor: kPlayButtonColor,
-// bufferedBarColor: kBufferingColor,
-// baseBarColor: kBaseBarColor,
-// thumbColor: kPlayButtonColor,
-// thumbRadius: 5,
-// thumbGlowRadius: 12,
-// timeLabelLocation: TimeLabelLocation.below,
-// timeLabelTextStyle: TextStyle(
-// color: kPlayButtonColor,
-// fontSize: 11,
-// fontWeight: FontWeight.w600),

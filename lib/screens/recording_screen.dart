@@ -5,9 +5,44 @@ import 'package:volink/widgets/custom_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:volink/models/audio_data.dart';
 import 'package:volink/models/chats_list_data.dart';
+import 'package:record_mp3/record_mp3.dart';
 
 class RecordingScreen extends StatelessWidget {
   final FileService fileService = FileService();
+
+  Widget getMiddleButton(BuildContext context) {
+    Widget result;
+
+    Provider.of<AudioData>(context).recordStatus == RecordStatus.RECORDING
+        ? result = CustomIconButton(
+            backGroundColor: Colors.white,
+            elevation: 5,
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.pause,
+              color: Colors.black,
+              size: 45,
+            ),
+            onTap: () {
+              Provider.of<AudioData>(context, listen: false).pauseRecord();
+            },
+          )
+        : result = CustomIconButton(
+            backGroundColor: Colors.white,
+            elevation: 5,
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.play_arrow_rounded,
+              color: Colors.black,
+              size: 45,
+            ),
+            onTap: () {
+              Provider.of<AudioData>(context, listen: false).resumeRecord();
+            },
+          );
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,29 +78,24 @@ class RecordingScreen extends StatelessWidget {
                   size: 45,
                 ),
                 onTap: () {
-                  //TODO - Cancel recording çağırılacak
                   Provider.of<AudioData>(context, listen: false).cancelRecord(
                       Provider.of<AudioData>(context, listen: false)
                           .recordFilePath);
                   Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.black54,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 1),
+                      content: Text("Recording Cancelled"),
+                    ),
+                  );
                 },
               ),
               SizedBox(
                 width: 8,
               ),
-              CustomIconButton(
-                backGroundColor: Colors.white,
-                elevation: 5,
-                padding: EdgeInsets.all(8),
-                child: Icon(
-                  Icons.pause,
-                  color: Colors.black,
-                  size: 45,
-                ),
-                onTap: () {
-                  //TODO - Pause recording çağırılacak
-                },
-              ),
+              getMiddleButton(context),
               SizedBox(
                 width: 8,
               ),
@@ -94,6 +124,13 @@ class RecordingScreen extends StatelessWidget {
                             Provider.of<AudioData>(context, listen: false)
                                 .recordFilePath);
                   }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 1),
+                      behavior: SnackBarBehavior.floating,
+                      content: Text("Message sent"),
+                    ),
+                  );
                   Navigator.pop(context);
                 },
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:volink/firebase_services/auth_service.dart';
+import 'package:volink/models/audio_manager.dart';
 import 'package:volink/models/chat_main_data.dart';
 import 'package:volink/widgets/message_tile.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,9 @@ class MessagesList extends StatelessWidget {
               reverse: true,
               itemBuilder: (context, index) {
                 return MessageTile(
+                    audioManager: AudioManager(
+                        messageURL: chatMainData
+                            .currentChatMessages[index].voiceFileURL),
                     message: chatMainData.currentChatMessages[index],
                     ownMessage: index % 2 == 0 ? true : false
                     // chatMainData.currentChatMessages[index].senderID ==

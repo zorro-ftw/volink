@@ -12,14 +12,15 @@ class AudioManager {
     ),
   );
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
-
+  final String messageURL;
   AudioPlayer _audioPlayer;
-  AudioManager() {
+  AudioManager({this.messageURL}) {
     _init();
   }
 
   void _init() async {
     _audioPlayer = AudioPlayer();
+    await _audioPlayer.setUrl(messageURL);
 
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
@@ -67,9 +68,7 @@ class AudioManager {
     });
   }
 
-  void playMessage(Message message) async {
-    print(message.voiceFileURL);
-    await _audioPlayer.setUrl(message.voiceFileURL);
+  void playMessage() async {
     await _audioPlayer.play();
   }
 
