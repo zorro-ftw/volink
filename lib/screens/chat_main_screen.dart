@@ -71,7 +71,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(bottom: 5),
+        padding: EdgeInsets.only(bottom: 10),
         child: MessagesList(),
       ),
       bottomNavigationBar: Container(
@@ -88,7 +88,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
                     color: kTextGradientColor1,
                   ),
                   splashColor: kPlayButtonColor.withOpacity(0.3),
-                  iconSize: 40,
+                  iconSize: 38,
                   onPressed: () {
                     //TODO - Ses filtre ekranı açılacak
                   }),

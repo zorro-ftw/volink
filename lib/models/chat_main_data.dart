@@ -47,7 +47,7 @@ class ChatMainData extends ChangeNotifier {
             }
           }
           if (isNew) {
-            currentChatMessages.add(currentMessage);
+            currentChatMessages.insert(0, currentMessage);
           }
         }
       }

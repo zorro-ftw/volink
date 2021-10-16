@@ -8,7 +8,9 @@ const kTextGradientColor1 = Color(0xFF399E86);
 const kTextGradientColor2 = Color(0xFFEF4321);
 const kButtonBackgroundColor = Color(0xFF384152);
 const kGeneralColor = Colors.white54;
-const kPlayButtonColor = Color(0xFF47545A);
+const kPlayButtonColor = Color(0xFF292D32);
+const kBufferingColor = Color(0xFF465053);
+const kBaseBarColor = Color(0xFF5E6B6E);
 
 const kOwnMessageTileDecoration = BoxDecoration(
   color: kTextGradientColor1,

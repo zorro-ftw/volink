@@ -144,7 +144,6 @@ class FileService {
 
   Future uploadAudio(
       {List<Chat> userChats, Chat displayedChat, String recordFilePath}) async {
-    var messageFileURL;
     Reference firebaseStorageRef = FirebaseStorage.instance
         .refFromURL("gs://volink-41421.appspot.com")
         .child(path.basename(recordFilePath));

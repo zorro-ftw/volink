@@ -19,13 +19,13 @@ class MessagesList extends StatelessWidget {
               reverse: true,
               itemBuilder: (context, index) {
                 return MessageTile(
-                  message: chatMainData.currentChatMessages[index],
-                  ownMessage:
-                      chatMainData.currentChatMessages[index].senderID ==
-                              AuthService().currentUserId
-                          ? true
-                          : false,
-                );
+                    message: chatMainData.currentChatMessages[index],
+                    ownMessage: index % 2 == 0 ? true : false
+                    // chatMainData.currentChatMessages[index].senderID ==
+                    //         AuthService().currentUserId
+                    //     ? true
+                    //     : false,
+                    );
               },
               itemCount: chatMainData.currentChatMessages.length);
     });
