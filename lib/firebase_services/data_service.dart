@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -49,6 +50,16 @@ class DataService {
     final queryOutputData = await firestore
         .collection(collection)
         .where(field, isEqualTo: queryString)
+        .get();
+
+    return queryOutputData.docs;
+  }
+
+  Future getStringIncludesQuery(
+      {String queryString, String collection, String field}) async {
+    final queryOutputData = await firestore
+        .collection(collection)
+        .where(field, isGreaterThanOrEqualTo: queryString)
         .get();
 
     return queryOutputData.docs;

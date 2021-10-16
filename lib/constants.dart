@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kDefaultProfilePhotoURL =
-    'https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg';
+    'https://firebasestorage.googleapis.com/v0/b/volink-41421.appspot.com/o/VOLink_default_pp.jpg?alt=media&token=528af50c-845f-4132-b849-1f0154cc1eb8';
 
 const kBackgroundColor = Color(0xFF303133);
 const kTextGradientColor1 = Color(0xFF399E86);

@@ -44,6 +44,7 @@ dependencies:
   path: ^1.8.0
   record_mp3: ^3.0.0
   firebase_storage: ^10.0.5
+  flutter_typeahead: ^3.2.1
 
 dev_dependencies:
   flutter_test:

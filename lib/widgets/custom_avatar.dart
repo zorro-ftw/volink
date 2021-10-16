@@ -12,7 +12,7 @@ class CustomAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircularProfileAvatar(
       chat.peerPhotoURL == null
-          ? ''
+          ? kDefaultProfilePhotoURL
           : chat
               .peerPhotoURL, //sets image path, it should be a URL string. default value is empty string, if path is empty it will display only initials
       radius: radius == null ? 25 : radius, // sets radius, default 50.0
