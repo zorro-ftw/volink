@@ -4,19 +4,18 @@ import 'package:volink/models/audio_data.dart';
 import 'package:volink/models/chat.dart';
 import 'package:volink/constants.dart';
 import 'package:volink/screens/recording_screen.dart';
-import 'package:volink/viewmodels/messages_list.dart';
 import 'package:volink/widgets/custom_avatar.dart';
 import 'package:volink/widgets/custom_icon_button.dart';
 import 'package:provider/provider.dart';
 
-class ChatMainScreen extends StatefulWidget {
-  ChatMainScreen({this.chat});
+class NewChatMainScreen extends StatefulWidget {
+  NewChatMainScreen({this.chat});
   final Chat chat;
   @override
-  _ChatMainScreenState createState() => _ChatMainScreenState();
+  _NewChatMainScreenState createState() => _NewChatMainScreenState();
 }
 
-class _ChatMainScreenState extends State<ChatMainScreen> {
+class _NewChatMainScreenState extends State<NewChatMainScreen> {
   // GlobalKey chatMainKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,10 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return RecordingScreen(role: RecordingScreenRole.oldChat);
+                return RecordingScreen(
+                  role: RecordingScreenRole.newChat,
+                  newChat: widget.chat,
+                );
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -73,7 +75,12 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
       ),
       body: Container(
         padding: EdgeInsets.only(bottom: 10),
-        child: MessagesList(),
+        child: Center(
+          child: Text(
+            "Send a message and start conversation!",
+            style: TextStyle(color: Colors.white54, fontSize: 17),
+          ),
+        ),
       ),
       bottomNavigationBar: Container(
         height: 55,

@@ -16,11 +16,11 @@ class AuthService {
     return _auth.currentUser.uid;
   }
 
-  currentUserEmail() async {
+  currentUserEmail() {
     return _auth.currentUser.email.toString();
   }
 
-  currentUserName() async {
+  currentUserName() {
     return _auth.currentUser.displayName;
   }
 

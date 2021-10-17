@@ -55,6 +55,7 @@ class AudioData extends ChangeNotifier {
 
   void resumeRecord() {
     bool r = recorder.resume();
+
     if (r) {
       recordStatus = RecordStatus.RECORDING;
       notifyListeners();
@@ -64,6 +65,7 @@ class AudioData extends ChangeNotifier {
   void cancelRecord(String cancelledRecordPath) async {
     bool s = recorder.stop();
     if (s) {
+      recordStatus = RecordStatus.IDEL;
       await FileService().deleteFile(cancelledRecordPath);
     }
   }

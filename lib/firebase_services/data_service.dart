@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,6 +23,24 @@ class DataService {
           .whenComplete(() => null);
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future getUserChatsQuery(
+      {List queryArray,
+      String collection,
+      String field,
+      String orderBy,
+      bool descending}) async {
+    final queryOutputData = await firestore
+        .collection(collection)
+        .where(field, arrayContains: queryArray[0])
+        .orderBy(orderBy, descending: descending)
+        .get();
+    if (queryOutputData.docs[0].data()[field].contains(queryArray[1])) {
+      return queryOutputData.docs;
+    } else {
+      return null;
     }
   }
 
@@ -92,18 +109,6 @@ class FileService {
   Future handleChat(
       {List<Chat> userChats, Chat displayedChat, String voiceFileURL}) async {
     bool isNewChat = true;
-    print(voiceFileURL);
-
-    var currentChatDummy = displayedChat;
-    Message newRecordedMessage = Message(
-      sentAt: Timestamp.now(),
-      voiceFileURL: voiceFileURL,
-      messageForID: currentChatDummy.chatID,
-      receiverID: currentChatDummy.peerID,
-      receiverName: currentChatDummy.peerName,
-      senderID: AuthService().currentUserId,
-      senderName: AuthService().currentUser().displayName,
-    );
 
     for (Chat chat in userChats) {
       if (chat.chatID == displayedChat.chatID) {
@@ -111,6 +116,17 @@ class FileService {
       }
     }
     if (!isNewChat) {
+      var currentChatDummy = displayedChat;
+      Message newRecordedMessage = Message(
+        sentAt: Timestamp.now(),
+        voiceFileURL: voiceFileURL,
+        messageForID: currentChatDummy.chatID,
+        receiverID: currentChatDummy.peerID,
+        receiverName: currentChatDummy.peerName,
+        senderID: AuthService().currentUserId,
+        senderName: AuthService().currentUser().displayName,
+      );
+
       await DataService().addData(collectionPath: 'messages', data: {
         'sentAt': newRecordedMessage.sentAt,
         'voiceFileURL': newRecordedMessage.voiceFileURL,
@@ -135,7 +151,7 @@ class FileService {
         senderID: dummyRawData[0].data()['senderID'],
         senderName: dummyRawData[0].data()['senderName'],
       );
-      print('newRecordedMessage oluşturuldu: ' + newRecordedMessage.messageID);
+
       Map<String, dynamic> dummyChatData = await DataService()
           .getCollectionByIdQuery(
               documentID: newRecordedMessage.messageForID, collection: 'chats');
@@ -150,7 +166,73 @@ class FileService {
           docID: newRecordedMessage.messageForID,
           field: 'messages',
           value: dummyMessageIDList);
-    } else {}
+    } else {
+      await DataService().addData(collectionPath: 'chats', data: {
+        'lastMessageAt': Timestamp.now(),
+        'messages': [],
+        'peerIDs': [AuthService().currentUserId, displayedChat.peerID],
+        'peerNames': [AuthService().currentUserName(), displayedChat.peerName],
+        'peerPhotoURLs': [
+          AuthService().currentUser().photoURL,
+          displayedChat.peerPhotoURL
+        ]
+      });
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> newChatRawData =
+          await DataService().getUserChatsQuery(
+              queryArray: [AuthService().currentUserId, displayedChat.peerID],
+              collection: 'chats',
+              field: 'peerIDs',
+              orderBy: 'lastMessageAt',
+              descending: false);
+      print('*****************newChatRawData ? $newChatRawData');
+      Chat newChat = Chat(
+          chatID: newChatRawData[0].id,
+          peerID: displayedChat.peerID,
+          peerName: displayedChat.peerName,
+          peerPhotoURL: displayedChat.peerPhotoURL,
+          messages: [],
+          lastMessageAt: newChatRawData[0].data()['lastMessageAt'].toDate());
+      Message newRecordedMessage = Message(
+        sentAt: Timestamp.fromDate(newChat.lastMessageAt),
+        voiceFileURL: voiceFileURL,
+        messageForID: newChat.chatID,
+        receiverID: newChat.peerID,
+        receiverName: newChat.peerName,
+        senderID: AuthService().currentUserId,
+        senderName: AuthService().currentUser().displayName,
+      );
+      await DataService().addData(collectionPath: 'messages', data: {
+        'sentAt': newRecordedMessage.sentAt,
+        'voiceFileURL': newRecordedMessage.voiceFileURL,
+        'messageForID': newRecordedMessage.messageForID,
+        'receiverID': newRecordedMessage.receiverID,
+        'receiverName': newRecordedMessage.receiverName,
+        'senderID': newRecordedMessage.senderID,
+        'senderName': newRecordedMessage.senderName
+      });
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> dummyRawData =
+          await DataService().getStringQuery(
+              collection: 'messages',
+              queryString: newRecordedMessage.voiceFileURL,
+              field: 'voiceFileURL');
+      newRecordedMessage = Message(
+        messageID: dummyRawData[0].id,
+        sentAt: dummyRawData[0].data()['sentAt'],
+        voiceFileURL: dummyRawData[0].data()['voiceFileURL'],
+        messageForID: dummyRawData[0].data()['messageForID'],
+        receiverID: dummyRawData[0].data()['receiverID'],
+        receiverName: dummyRawData[0].data()['receiverName'],
+        senderID: dummyRawData[0].data()['senderID'],
+        senderName: dummyRawData[0].data()['senderName'],
+      );
+      List dummyMessageIDList = [];
+      dummyMessageIDList.add(newRecordedMessage.messageID);
+      await DataService().updateDataByID(
+          collectionPath: 'chats',
+          docID: newRecordedMessage.messageForID,
+          field: 'messages',
+          value: dummyMessageIDList);
+    }
   }
 
   Future uploadAudio(

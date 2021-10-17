@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:volink/firebase_services/data_service.dart';
 import 'package:volink/models/chat_main_data.dart';
+import 'package:volink/screens/chat_main_screen.dart';
+import 'package:volink/screens/main_screen.dart';
 import 'package:volink/widgets/custom_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:volink/models/audio_data.dart';
 import 'package:volink/models/chats_list_data.dart';
 import 'package:record_mp3/record_mp3.dart';
+import 'package:volink/enums.dart';
+import 'package:volink/models/chat.dart';
 
 class RecordingScreen extends StatelessWidget {
   final FileService fileService = FileService();
+  RecordingScreen({this.role, this.newChat});
+  final RecordingScreenRole role;
+  final Chat newChat;
 
   Widget getMiddleButton(BuildContext context) {
     Widget result;
 
-    Provider.of<AudioData>(context).recordStatus == RecordStatus.RECORDING
+    Provider.of<AudioData>(context).recordStatus == RecordStatus.RECORDING ||
+            Provider.of<AudioData>(context).recordStatus == RecordStatus.IDEL
         ? result = CustomIconButton(
             backGroundColor: Colors.white,
             elevation: 5,
@@ -44,6 +52,22 @@ class RecordingScreen extends StatelessWidget {
     return result;
   }
 
+  Widget getRecordingStatusText(BuildContext context) {
+    if (Provider.of<AudioData>(context).recordStatus ==
+            RecordStatus.RECORDING ||
+        Provider.of<AudioData>(context).recordStatus == RecordStatus.IDEL) {
+      return Text(
+        "Recording",
+        style: TextStyle(color: Colors.green, fontSize: 26),
+      );
+    } else {
+      return Text(
+        "Paused",
+        style: TextStyle(color: Colors.black, fontSize: 26),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,10 +82,7 @@ class RecordingScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "Recording",
-            style: TextStyle(color: Colors.green, fontSize: 26),
-          ),
+          getRecordingStatusText(context),
           SizedBox(
             height: 10,
           ),
@@ -81,6 +102,8 @@ class RecordingScreen extends StatelessWidget {
                   Provider.of<AudioData>(context, listen: false).cancelRecord(
                       Provider.of<AudioData>(context, listen: false)
                           .recordFilePath);
+                  print(Provider.of<AudioData>(context, listen: false)
+                      .recordStatus);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -109,14 +132,14 @@ class RecordingScreen extends StatelessWidget {
                   size: 45,
                 ),
                 onTap: () async {
-                  //TODO - Stop recording & upload çağırılacak
                   bool s = await Provider.of<AudioData>(context, listen: false)
                       .stopRecord();
                   if (s) {
                     await fileService.uploadAudio(
-                        displayedChat:
-                            Provider.of<ChatMainData>(context, listen: false)
-                                .displayedChat,
+                        displayedChat: role == RecordingScreenRole.oldChat
+                            ? Provider.of<ChatMainData>(context, listen: false)
+                                .displayedChat
+                            : newChat,
                         userChats:
                             Provider.of<ChatsListData>(context, listen: false)
                                 .userChats,
@@ -132,6 +155,10 @@ class RecordingScreen extends StatelessWidget {
                     ),
                   );
                   Navigator.pop(context);
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return MainScreen();
+                  }));
                 },
               ),
             ],

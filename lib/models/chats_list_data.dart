@@ -25,12 +25,12 @@ class ChatsListData extends ChangeNotifier {
   }
 
   String checkPhotoURL(QueryDocumentSnapshot<Map<String, dynamic>> snapshot) {
-    if (snapshot.data()['photoURLs'].length != 0) {
-      if (snapshot.data()['photoURLs'][0] ==
+    if (snapshot.data()['peerPhotoURLs'].length != 0) {
+      if (snapshot.data()['peerPhotoURLs'][0] ==
           AuthService().currentUser().photoURL) {
-        return snapshot.data()['photoURLs'][1];
+        return snapshot.data()['peerPhotoURLs'][1];
       } else {
-        return snapshot.data()['photoURLs'][0];
+        return snapshot.data()['peerPhotoURLs'][0];
       }
     } else {
       return null;
@@ -39,8 +39,9 @@ class ChatsListData extends ChangeNotifier {
 
   void updateUserChatList(QuerySnapshot<Map<String, dynamic>> snapshot) {
     List<Chat> onlineChatList = [];
+    print("SNAPSHOT DOCS = ${snapshot.docs}");
 
-    if (snapshot.size != 0) {
+    if (snapshot.docs.isNotEmpty) {
       print("if'in içine girdi");
       for (int i = 0; i < snapshot.docs.length; i++) {
         Chat currentChat = Chat(
