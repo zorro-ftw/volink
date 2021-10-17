@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:volink/firebase_services/auth_service.dart';
 import 'package:volink/models/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volink/models/notification_manager.dart';
 
 class ChatsListData extends ChangeNotifier {
   List<Chat> _userChats = [];
@@ -37,7 +38,7 @@ class ChatsListData extends ChangeNotifier {
     }
   }
 
-  void updateUserChatList(QuerySnapshot<Map<String, dynamic>> snapshot) {
+  void updateUserChatList(QuerySnapshot<Map<String, dynamic>> snapshot) async {
     List<Chat> onlineChatList = [];
     print("SNAPSHOT DOCS = ${snapshot.docs}");
 
@@ -61,6 +62,9 @@ class ChatsListData extends ChangeNotifier {
         onlineChatList.add(currentChat);
         if (_userChats.length == 0) {
           _userChats.add(currentChat);
+          await NotificationManager().showNotification(
+              title: '1 new message',
+              body: 'New message from ${currentChat.peerName}');
         } else if (_userChats.length < snapshot.size) {
           bool isNew = true;
           for (int j = 0; j < _userChats.length; j++) {
@@ -71,6 +75,10 @@ class ChatsListData extends ChangeNotifier {
           }
           if (isNew) {
             _userChats.add(currentChat);
+            //TODO - Bildirim gönderilecek
+            await NotificationManager().showNotification(
+                title: '1 new message',
+                body: 'New message from ${currentChat.peerName}');
           }
         }
       }

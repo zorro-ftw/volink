@@ -75,6 +75,9 @@ class _MessageTileState extends State<MessageTile> {
           progress: value.current,
           buffered: value.buffered,
           total: value.total,
+          onSeek: (duration) {
+            widget.audioManager.seek(duration);
+          },
         );
       },
     );

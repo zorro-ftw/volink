@@ -3,6 +3,7 @@ import 'package:volink/firebase_services/data_service.dart';
 import 'package:volink/models/chat.dart';
 import 'package:volink/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:volink/models/notification_manager.dart';
 
 class ChatMainData extends ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -19,7 +20,11 @@ class ChatMainData extends ChangeNotifier {
 
   void updateCurrentChatMessages(
       DocumentSnapshot<Map<String, dynamic>> snapshot) async {
-    List snapshotMessages = snapshot.data()['messages'];
+    List snapshotMessages = [];
+
+    snapshot.data()['messages'] != null
+        ? snapshotMessages = snapshot.data()['messages']
+        : snapshotMessages = [];
     if (snapshotMessages.isNotEmpty) {
       for (int i = 0; i < snapshotMessages.length; i++) {
         Map<String, dynamic> currentMessageRaw = await DataService()
@@ -48,6 +53,11 @@ class ChatMainData extends ChangeNotifier {
           }
           if (isNew) {
             currentChatMessages.insert(0, currentMessage);
+            //TODO - Bildirim gönderilecek
+            print('*******************NOTIFICATION GÖNDERİLECEK**********');
+            await NotificationManager().showNotification(
+                title: '1 new message',
+                body: 'New message from ${currentMessage.senderName}');
           }
         }
       }

@@ -75,6 +75,10 @@ class AudioManager {
   void pause() {
     _audioPlayer.pause();
   }
+
+  void seek(Duration position) {
+    _audioPlayer.seek(position);
+  }
 }
 
 class ProgressBarState {

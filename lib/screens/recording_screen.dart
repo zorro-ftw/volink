@@ -155,10 +155,12 @@ class RecordingScreen extends StatelessWidget {
                     ),
                   );
                   Navigator.pop(context);
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return MainScreen();
-                  }));
+                  if (role == RecordingScreenRole.newChat) {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return MainScreen();
+                    }));
+                  }
                 },
               ),
             ],
